@@ -56,11 +56,6 @@ app.get('/todos', checksExistsUserAccount, (request, response) => {
   // Complete aqui
   const { user } = request;
 
-  if (user.todos === null) {
-    // not working right now
-    return response.status(404).json({ error: "todos: not found" })
-  }
-
   return response.json(user.todos);
 });
 
@@ -88,7 +83,7 @@ app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
   const { title, deadline } = request.body;
   const { id } = request.params;
 
-  const todo = user.todos.find(todo => id === id)
+  const todo = user.todos.find(todo => todo.id === id)
 
   if (!todo) {
     return response.status(404).json({ error: 'Non existing ToDo' })
@@ -105,7 +100,7 @@ app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
   const { id } = request.params;
   const { user } = request;
 
-  const todo = user.todos.find(todo => id === id)
+  const todo = user.todos.find(todo => todo.id === id)
 
   if (!todo) {
     return response.status(404).json({ error: 'Non existing ToDo' })
@@ -113,7 +108,7 @@ app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
 
   todo.done = true;
 
-  return response.json(user.todos)
+  return response.json(todo)
 });
 
 app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
@@ -121,7 +116,7 @@ app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
   const { user } = request;
   const { id } = request.params;
 
-  const todo = user.todos.find(todo => id === id)
+  const todo = user.todos.find(todo => todo.id === id)
 
   if (!todo) {
     return response.status(404).json({ error: 'Non existing ToDo' })
@@ -129,7 +124,7 @@ app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
 
   user.todos.splice(todo.id, 1);
 
-  return response.json(user.todos)
+  return response.status(204).json()
 
 });
 
